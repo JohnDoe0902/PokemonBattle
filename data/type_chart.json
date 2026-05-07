@@ -1,0 +1,24 @@
+{
+  "_comment": "Tabla de efectividad Gen 6+ (incluye Hada). Filas = tipo del ATAQUE, columnas = tipo del DEFENSOR. 2.0 = súper eficaz, 0.5 = poco eficaz, 0.0 = inmunidad, 1.0 = neutro.",
+  "types": ["Acero","Agua","Bicho","Dragón","Eléctrico","Fantasma","Fuego","Hada","Hielo","Lucha","Normal","Planta","Psíquico","Roca","Siniestro","Tierra","Veneno","Volador"],
+  "chart": {
+    "Acero":     {"Acero":0.5,"Agua":0.5,"Bicho":1.0,"Dragón":1.0,"Eléctrico":0.5,"Fantasma":1.0,"Fuego":0.5,"Hada":2.0,"Hielo":2.0,"Lucha":1.0,"Normal":1.0,"Planta":1.0,"Psíquico":1.0,"Roca":2.0,"Siniestro":1.0,"Tierra":1.0,"Veneno":1.0,"Volador":1.0},
+    "Agua":      {"Acero":1.0,"Agua":0.5,"Bicho":1.0,"Dragón":0.5,"Eléctrico":1.0,"Fantasma":1.0,"Fuego":2.0,"Hada":1.0,"Hielo":1.0,"Lucha":1.0,"Normal":1.0,"Planta":0.5,"Psíquico":1.0,"Roca":2.0,"Siniestro":1.0,"Tierra":2.0,"Veneno":1.0,"Volador":1.0},
+    "Bicho":     {"Acero":0.5,"Agua":1.0,"Bicho":1.0,"Dragón":1.0,"Eléctrico":1.0,"Fantasma":0.5,"Fuego":0.5,"Hada":0.5,"Hielo":1.0,"Lucha":0.5,"Normal":1.0,"Planta":2.0,"Psíquico":2.0,"Roca":1.0,"Siniestro":2.0,"Tierra":1.0,"Veneno":0.5,"Volador":0.5},
+    "Dragón":    {"Acero":0.5,"Agua":1.0,"Bicho":1.0,"Dragón":2.0,"Eléctrico":1.0,"Fantasma":1.0,"Fuego":1.0,"Hada":0.0,"Hielo":1.0,"Lucha":1.0,"Normal":1.0,"Planta":1.0,"Psíquico":1.0,"Roca":1.0,"Siniestro":1.0,"Tierra":1.0,"Veneno":1.0,"Volador":1.0},
+    "Eléctrico": {"Acero":1.0,"Agua":2.0,"Bicho":1.0,"Dragón":0.5,"Eléctrico":0.5,"Fantasma":1.0,"Fuego":1.0,"Hada":1.0,"Hielo":1.0,"Lucha":1.0,"Normal":1.0,"Planta":0.5,"Psíquico":1.0,"Roca":1.0,"Siniestro":1.0,"Tierra":0.0,"Veneno":1.0,"Volador":2.0},
+    "Fantasma":  {"Acero":1.0,"Agua":1.0,"Bicho":1.0,"Dragón":1.0,"Eléctrico":1.0,"Fantasma":2.0,"Fuego":1.0,"Hada":1.0,"Hielo":1.0,"Lucha":1.0,"Normal":0.0,"Planta":1.0,"Psíquico":2.0,"Roca":1.0,"Siniestro":0.5,"Tierra":1.0,"Veneno":1.0,"Volador":1.0},
+    "Fuego":     {"Acero":2.0,"Agua":0.5,"Bicho":2.0,"Dragón":0.5,"Eléctrico":1.0,"Fantasma":1.0,"Fuego":0.5,"Hada":1.0,"Hielo":2.0,"Lucha":1.0,"Normal":1.0,"Planta":2.0,"Psíquico":1.0,"Roca":0.5,"Siniestro":1.0,"Tierra":1.0,"Veneno":1.0,"Volador":1.0},
+    "Hada":      {"Acero":0.5,"Agua":1.0,"Bicho":1.0,"Dragón":2.0,"Eléctrico":1.0,"Fantasma":1.0,"Fuego":0.5,"Hada":1.0,"Hielo":1.0,"Lucha":2.0,"Normal":1.0,"Planta":1.0,"Psíquico":1.0,"Roca":1.0,"Siniestro":2.0,"Tierra":1.0,"Veneno":0.5,"Volador":1.0},
+    "Hielo":     {"Acero":0.5,"Agua":0.5,"Bicho":1.0,"Dragón":2.0,"Eléctrico":1.0,"Fantasma":1.0,"Fuego":0.5,"Hada":1.0,"Hielo":0.5,"Lucha":1.0,"Normal":1.0,"Planta":2.0,"Psíquico":1.0,"Roca":1.0,"Siniestro":1.0,"Tierra":2.0,"Veneno":1.0,"Volador":2.0},
+    "Lucha":     {"Acero":2.0,"Agua":1.0,"Bicho":0.5,"Dragón":1.0,"Eléctrico":1.0,"Fantasma":0.0,"Fuego":1.0,"Hada":0.5,"Hielo":2.0,"Lucha":1.0,"Normal":2.0,"Planta":1.0,"Psíquico":0.5,"Roca":2.0,"Siniestro":2.0,"Tierra":1.0,"Veneno":0.5,"Volador":0.5},
+    "Normal":    {"Acero":0.5,"Agua":1.0,"Bicho":1.0,"Dragón":1.0,"Eléctrico":1.0,"Fantasma":0.0,"Fuego":1.0,"Hada":1.0,"Hielo":1.0,"Lucha":1.0,"Normal":1.0,"Planta":1.0,"Psíquico":1.0,"Roca":0.5,"Siniestro":1.0,"Tierra":1.0,"Veneno":1.0,"Volador":1.0},
+    "Planta":    {"Acero":0.5,"Agua":2.0,"Bicho":0.5,"Dragón":0.5,"Eléctrico":1.0,"Fantasma":1.0,"Fuego":0.5,"Hada":1.0,"Hielo":1.0,"Lucha":1.0,"Normal":1.0,"Planta":0.5,"Psíquico":1.0,"Roca":2.0,"Siniestro":1.0,"Tierra":2.0,"Veneno":0.5,"Volador":0.5},
+    "Psíquico":  {"Acero":0.5,"Agua":1.0,"Bicho":1.0,"Dragón":1.0,"Eléctrico":1.0,"Fantasma":1.0,"Fuego":1.0,"Hada":1.0,"Hielo":1.0,"Lucha":2.0,"Normal":1.0,"Planta":1.0,"Psíquico":0.5,"Roca":1.0,"Siniestro":0.0,"Tierra":1.0,"Veneno":2.0,"Volador":1.0},
+    "Roca":      {"Acero":0.5,"Agua":1.0,"Bicho":2.0,"Dragón":1.0,"Eléctrico":1.0,"Fantasma":1.0,"Fuego":2.0,"Hada":1.0,"Hielo":2.0,"Lucha":0.5,"Normal":1.0,"Planta":1.0,"Psíquico":1.0,"Roca":1.0,"Siniestro":1.0,"Tierra":0.5,"Veneno":1.0,"Volador":2.0},
+    "Siniestro": {"Acero":1.0,"Agua":1.0,"Bicho":1.0,"Dragón":1.0,"Eléctrico":1.0,"Fantasma":2.0,"Fuego":1.0,"Hada":0.5,"Hielo":1.0,"Lucha":0.5,"Normal":1.0,"Planta":1.0,"Psíquico":2.0,"Roca":1.0,"Siniestro":0.5,"Tierra":1.0,"Veneno":1.0,"Volador":1.0},
+    "Tierra":    {"Acero":2.0,"Agua":1.0,"Bicho":0.5,"Dragón":1.0,"Eléctrico":2.0,"Fantasma":1.0,"Fuego":2.0,"Hada":1.0,"Hielo":1.0,"Lucha":1.0,"Normal":1.0,"Planta":0.5,"Psíquico":1.0,"Roca":2.0,"Siniestro":1.0,"Tierra":1.0,"Veneno":2.0,"Volador":0.0},
+    "Veneno":    {"Acero":0.0,"Agua":1.0,"Bicho":1.0,"Dragón":1.0,"Eléctrico":1.0,"Fantasma":0.5,"Fuego":1.0,"Hada":2.0,"Hielo":1.0,"Lucha":1.0,"Normal":1.0,"Planta":2.0,"Psíquico":1.0,"Roca":0.5,"Siniestro":1.0,"Tierra":0.5,"Veneno":0.5,"Volador":1.0},
+    "Volador":   {"Acero":0.5,"Agua":1.0,"Bicho":2.0,"Dragón":1.0,"Eléctrico":0.5,"Fantasma":1.0,"Fuego":1.0,"Hada":1.0,"Hielo":1.0,"Lucha":2.0,"Normal":1.0,"Planta":2.0,"Psíquico":1.0,"Roca":0.5,"Siniestro":1.0,"Tierra":1.0,"Veneno":1.0,"Volador":1.0}
+  }
+}

@@ -1,0 +1,334 @@
+{
+  "_comment": "Movesets canónicos por Pokémon (level-up, MTs y tutores en Gen 8/9). Cada lista es el pool del que se eligen los 4 movs del combate. Para añadir/quitar movs solo edita esta lista — los IDs deben coincidir con data/moves.json.",
+  "learnsets": {
+    "Dragonite": [
+      "garra_dragon","pulso_dragon","enfado","aliento_dragon","cometa_draco","golpe_bis",
+      "vendaval","tajo_aereo","vuelo","pajaro_osado","aire_afilado",
+      "hiperrayo","gigaimpacto","doble_filo","golpe_cuerpo","cuchillada","rapidez",
+      "puno_trueno","trueno","rayo",
+      "puno_fuego","lanzallamas",
+      "puno_hielo","rayo_hielo",
+      "surf","cascada","terremoto"
+    ],
+    "Tyranitar": [
+      "roca_afilada","avalancha","tumba_rocas","lanzarrocas","antiaereo","pedrada",
+      "pulso_umbrio","triturar","tajo_umbrio","golpe_bajo","juego_sucio","vendetta",
+      "terremoto","excavar","fuerza_equina",
+      "a_bocajarro","demolicion","onda_certera",
+      "cabeza_de_hierro","cola_ferrea",
+      "lanzallamas","puno_fuego",
+      "rayo","puno_trueno",
+      "rayo_hielo","puno_hielo",
+      "hiperrayo","gigaimpacto","cuchillada","doble_filo","golpe_cuerpo","surf"
+    ],
+    "Metagross": [
+      "puno_meteoro","cabeza_de_hierro","garra_metal","cuerpo_pesado","foco_resplandor",
+      "psiquico","cabezazo_zen","psicocarga","confusion","premonicion","psico_onda",
+      "terremoto","roca_afilada",
+      "puno_trueno","trueno",
+      "puno_hielo",
+      "demolicion",
+      "hiperrayo","gigaimpacto","cuchillada","golpe_cuerpo"
+    ],
+    "Salamence": [
+      "garra_dragon","cometa_draco","pulso_dragon","enfado","aliento_dragon",
+      "vendaval","tajo_aereo","vuelo","aire_afilado","pajaro_osado",
+      "triturar","pulso_umbrio",
+      "lanzallamas","llamarada",
+      "terremoto","excavar",
+      "roca_afilada","tumba_rocas",
+      "hiperrayo","gigaimpacto","doble_filo","golpe_cuerpo"
+    ],
+    "Garchomp": [
+      "garra_dragon","cometa_draco","pulso_dragon","enfado","aliento_dragon",
+      "terremoto","tierra_viva","taladradora","excavar","fuerza_equina",
+      "roca_afilada","tumba_rocas","avalancha",
+      "triturar","tajo_umbrio",
+      "cola_ferrea",
+      "puno_fuego","lanzallamas",
+      "hiperrayo","gigaimpacto","doble_filo","cuchillada"
+    ],
+    "Hydreigon": [
+      "pulso_umbrio","triturar","juego_sucio","alarido",
+      "cometa_draco","pulso_dragon","aliento_dragon","enfado","carga_dragon",
+      "lanzallamas","llamarada",
+      "tajo_aereo","aire_afilado",
+      "energibola","rayo_solar",
+      "onda_certera",
+      "triataque","hiperrayo","gigaimpacto"
+    ],
+    "Goodra": [
+      "pulso_dragon","cometa_draco","aliento_dragon","enfado","golpe_bis",
+      "rayo_hielo","puno_hielo",
+      "trueno","rayo","puno_trueno",
+      "lanzallamas","llamarada","puno_fuego",
+      "hidrobomba","surf","escaldar",
+      "bomba_lodo","onda_toxica",
+      "energibola","giga_drenado",
+      "esfera_aural","onda_certera",
+      "acua_cola","golpe_cuerpo","doble_filo"
+    ],
+    "Kommo-o": [
+      "garra_dragon","pulso_dragon","aliento_dragon","cometa_draco","carga_dragon",
+      "a_bocajarro","demolicion","tajo_cruzado","gancho_alto","esfera_aural",
+      "cabeza_de_hierro","foco_resplandor",
+      "terremoto","fuerza_equina",
+      "roca_afilada","avalancha",
+      "puno_fuego","puno_trueno","puno_hielo",
+      "golpe_cuerpo","gigaimpacto"
+    ],
+    "Dragapult": [
+      "garra_dragon","pulso_dragon","cometa_draco","aliento_dragon",
+      "bola_sombra","sombra_vil","golpe_fantasma","tinieblas",
+      "ida_y_vuelta",
+      "lanzallamas","trueno","rayo",
+      "psiquico","psicocorte",
+      "surf","hidropulso",
+      "acrobata","tajo_aereo",
+      "hiperrayo","gigaimpacto"
+    ],
+    "Baxcalibur": [
+      "garra_dragon","pulso_dragon","aliento_dragon","cometa_draco","enfado",
+      "rayo_hielo","ventisca","puno_hielo","chuzos","colmillo_hielo","alud","canto_helado",
+      "terremoto","excavar",
+      "roca_afilada","avalancha",
+      "cabeza_de_hierro",
+      "golpe_cuerpo","gigaimpacto","doble_filo"
+    ],
+    "Gyarados": [
+      "hidrobomba","surf","cascada","acua_cola","hidropulso","escaldar",
+      "vendaval","tajo_aereo","vuelo",
+      "triturar","golpe_bajo","juego_sucio",
+      "terremoto",
+      "roca_afilada","avalancha","tumba_rocas",
+      "colmillo_hielo","puno_hielo",
+      "rayo","trueno",
+      "lanzallamas",
+      "hiperrayo","gigaimpacto","golpe_cuerpo"
+    ],
+    "Volcarona": [
+      "tijera_x","zumbido","picadura","plancha_atroz","cortefuria",
+      "lanzallamas","llamarada","sofoco","rueda_fuego","nitrocarga",
+      "vendaval","tajo_aereo","aire_afilado","golpe_aereo",
+      "psiquico","paranormal","confusion",
+      "energibola","giga_drenado","rayo_solar",
+      "hiperrayo","gigaimpacto"
+    ],
+    "Aegislash": [
+      "cabeza_de_hierro","puno_meteoro","foco_resplandor","cuerpo_pesado",
+      "bola_sombra","sombra_vil","puno_sombra","golpe_fantasma","tinieblas",
+      "demolicion","tajo_cruzado","onda_certera","esfera_aural","gancho_alto",
+      "psicocorte","cabezazo_zen",
+      "cuchillada","golpe_cuerpo","gigaimpacto"
+    ],
+    "Excadrill": [
+      "terremoto","tierra_viva","taladradora","excavar","fuerza_equina","terratemblor",
+      "cabeza_de_hierro","garra_metal","cola_ferrea","cuerpo_pesado","foco_resplandor",
+      "roca_afilada","avalancha","tumba_rocas",
+      "tijera_x",
+      "demolicion",
+      "triturar",
+      "cuchillada","golpe_cuerpo","gigaimpacto"
+    ],
+    "Mamoswine": [
+      "rayo_hielo","ventisca","colmillo_hielo","alud","chuzos","canto_helado",
+      "terremoto","excavar","fuerza_equina","terratemblor","disparo_lodo",
+      "roca_afilada","avalancha","tumba_rocas","antiaereo",
+      "puno_hielo",
+      "golpe_cuerpo","doble_filo","cuchillada","gigaimpacto"
+    ],
+    "Scizor": [
+      "tijera_x","ida_y_vuelta","picadura","plancha_atroz","cortefuria","megacuerno","chupavidas",
+      "cabeza_de_hierro","garra_metal","puno_meteoro","cuerpo_pesado","foco_resplandor",
+      "demolicion","gancho_alto",
+      "tajo_aereo","golpe_aereo","acrobata",
+      "puno_fuego","cuchillada","golpe_cuerpo"
+    ],
+    "Lucario": [
+      "a_bocajarro","esfera_aural","onda_certera","tajo_cruzado","puno_dinamico","gancho_alto","demolicion",
+      "cabeza_de_hierro","foco_resplandor","puno_meteoro","garra_metal",
+      "pulso_umbrio","golpe_bajo","tajo_umbrio",
+      "bola_sombra",
+      "puno_fuego","puno_trueno","puno_hielo",
+      "roca_afilada","avalancha",
+      "rapidez","cuchillada","golpe_cuerpo"
+    ],
+    "Greninja": [
+      "hidrobomba","surf","cascada","hidropulso","shuriken_de_agua","escaldar","rayo_burbuja",
+      "pulso_umbrio","tajo_umbrio","juego_sucio","desarme","golpe_bajo",
+      "rayo_hielo","colmillo_hielo",
+      "ida_y_vuelta",
+      "sombra_vil","bola_sombra",
+      "acrobata","tajo_aereo",
+      "cuchillada","cortefuria","rapidez"
+    ],
+    "Blaziken": [
+      "lanzallamas","llamarada","puno_fuego","envite_igneo","patada_ignea","nitrocarga","rueda_fuego",
+      "a_bocajarro","gancho_alto","demolicion","tajo_cruzado","puno_dinamico",
+      "puno_trueno",
+      "tajo_aereo","acrobata","golpe_aereo","picotazo_taladro",
+      "roca_afilada","avalancha",
+      "cuchillada","golpe_cuerpo","gigaimpacto","cortefuria"
+    ],
+    "Charizard": [
+      "lanzallamas","llamarada","sofoco","rueda_fuego","nitrocarga","envite_igneo","patada_ignea",
+      "vendaval","tajo_aereo","vuelo","aire_afilado","picotazo_taladro","acrobata","golpe_aereo",
+      "garra_dragon","pulso_dragon","aliento_dragon","cometa_draco",
+      "demolicion","tajo_cruzado",
+      "rayo_solar","energibola",
+      "onda_certera","esfera_aural",
+      "hiperrayo","cuchillada","cortefuria"
+    ],
+    "Tyrantrum": [
+      "roca_afilada","avalancha","tumba_rocas","testarazo","lanzarrocas","antiaereo",
+      "garra_dragon","pulso_dragon","aliento_dragon","enfado","cometa_draco",
+      "triturar","tajo_umbrio",
+      "terremoto","excavar","fuerza_equina",
+      "cabeza_de_hierro","cola_ferrea",
+      "puno_fuego",
+      "cuchillada","golpe_cuerpo","gigaimpacto"
+    ],
+    "Haxorus": [
+      "garra_dragon","pulso_dragon","aliento_dragon","enfado","cometa_draco","carga_dragon",
+      "terremoto","excavar","fuerza_equina",
+      "roca_afilada","tumba_rocas",
+      "tijera_x",
+      "demolicion","gancho_alto",
+      "cabeza_de_hierro","cola_ferrea",
+      "acua_cola",
+      "puno_fuego","puno_trueno",
+      "tajo_aereo",
+      "cuchillada","cortefuria","golpe_cuerpo","gigaimpacto"
+    ],
+    "Infernape": [
+      "lanzallamas","llamarada","puno_fuego","rueda_fuego","nitrocarga","patada_ignea",
+      "a_bocajarro","gancho_alto","demolicion","puno_dinamico","tajo_cruzado","esfera_aural",
+      "puno_trueno",
+      "acrobata","tajo_aereo",
+      "roca_afilada","avalancha",
+      "ida_y_vuelta",
+      "cuchillada","cortefuria","rapidez","golpe_cuerpo"
+    ],
+    "Rillaboom": [
+      "mazazo","latigazo","hoja_aguda","semilladora","giga_drenado","energibola","hierba_lazo",
+      "terremoto","fuerza_equina",
+      "demolicion",
+      "roca_afilada","avalancha",
+      "acrobata","golpe_aereo",
+      "desarme","golpe_bajo",
+      "ida_y_vuelta",
+      "golpe_cuerpo","cuchillada","gigaimpacto","doble_filo"
+    ],
+    "Sceptile": [
+      "hoja_aguda","energibola","semilladora","giga_drenado","hierba_lazo","mazazo","rayo_solar",
+      "garra_dragon","pulso_dragon","aliento_dragon",
+      "tijera_x",
+      "tajo_umbrio","triturar",
+      "demolicion","tajo_cruzado",
+      "cola_ferrea",
+      "terremoto","excavar",
+      "roca_afilada",
+      "acrobata","tajo_aereo",
+      "rapidez","cuchillada"
+    ],
+    "Zeraora": [
+      "rayo","trueno","puno_trueno","voltio_cruel","electrotela","onda_voltio","chispazo","carga_parabolica",
+      "a_bocajarro","gancho_alto","demolicion","esfera_aural",
+      "triturar","tajo_umbrio",
+      "puno_fuego","puno_hielo",
+      "acrobata",
+      "cuchillada","cortefuria","rapidez","golpe_cuerpo"
+    ],
+    "Gardevoir": [
+      "psiquico","psicocarga","psicocorte","cabezazo_zen","premonicion","paranormal","confusion","psico_onda",
+      "brillo_magico","fuerza_lunar","beso_drenaje","viento_feerico","voz_cautivadora","luz_aniquiladora","carantona",
+      "bola_sombra",
+      "energibola",
+      "trueno","rayo",
+      "lanzallamas",
+      "esfera_aural","onda_certera",
+      "hiperrayo","triataque"
+    ],
+    "Corviknight": [
+      "vendaval","pajaro_osado","tajo_aereo","vuelo","picotazo_taladro","aire_afilado","golpe_aereo","acrobata",
+      "cabeza_de_hierro","cuerpo_pesado","foco_resplandor","cola_ferrea",
+      "ida_y_vuelta",
+      "demolicion",
+      "tajo_umbrio","golpe_bajo",
+      "cuchillada","golpe_cuerpo","gigaimpacto"
+    ],
+    "Togekiss": [
+      "tajo_aereo","vendaval","aire_afilado","vuelo","golpe_aereo","acrobata",
+      "brillo_magico","fuerza_lunar","viento_feerico","voz_cautivadora","carantona","beso_drenaje","luz_aniquiladora",
+      "esfera_aural",
+      "lanzallamas",
+      "psiquico","paranormal","premonicion",
+      "bola_sombra",
+      "triataque","golpe_cuerpo","hiperrayo","rapidez"
+    ],
+    "Krookodile": [
+      "terremoto","excavar","taladradora","fuerza_equina","disparo_lodo","terratemblor","bucle_arena",
+      "triturar","pulso_umbrio","tajo_umbrio","juego_sucio","desarme","golpe_bajo",
+      "roca_afilada","avalancha","tumba_rocas",
+      "acua_cola",
+      "demolicion","tajo_cruzado",
+      "tajo_aereo",
+      "cola_ferrea",
+      "cuchillada","golpe_cuerpo","gigaimpacto"
+    ],
+    "Alakazam": [
+      "psiquico","psicocarga","psicocorte","cabezazo_zen","premonicion","paranormal","confusion","psico_onda",
+      "bola_sombra","tinieblas",
+      "energibola",
+      "puno_fuego","puno_trueno","puno_hielo",
+      "brillo_magico",
+      "esfera_aural","onda_certera",
+      "rayo","trueno",
+      "triataque","rapidez","hiperrayo","gigaimpacto"
+    ],
+    "Snorlax": [
+      "golpe_cuerpo","hiperrayo","gigaimpacto","doble_filo","cuchillada","rapidez","autodestruccion",
+      "cuerpo_pesado",
+      "puno_fuego","puno_trueno","puno_hielo","lanzallamas","trueno","rayo","rayo_hielo",
+      "terremoto","fuerza_equina","excavar","terratemblor",
+      "demolicion","a_bocajarro","tajo_cruzado",
+      "triturar","golpe_bajo",
+      "roca_afilada","avalancha"
+    ],
+    "Slaking": [
+      "golpe_cuerpo","hiperrayo","gigaimpacto","doble_filo","cuchillada","rapidez",
+      "puno_fuego","puno_trueno","puno_hielo","lanzallamas","trueno","rayo_hielo",
+      "terremoto","fuerza_equina","excavar","terratemblor",
+      "demolicion","a_bocajarro","gancho_alto","tajo_cruzado",
+      "triturar","golpe_bajo","juego_sucio",
+      "roca_afilada","avalancha","tumba_rocas",
+      "tajo_aereo"
+    ],
+    "Bisharp": [
+      "tajo_umbrio","pulso_umbrio","triturar","desarme","golpe_bajo","juego_sucio","vendetta",
+      "cabeza_de_hierro","puno_meteoro","garra_metal","cuerpo_pesado","cola_ferrea","foco_resplandor",
+      "tijera_x",
+      "demolicion","gancho_alto","tajo_cruzado",
+      "roca_afilada","avalancha","tumba_rocas",
+      "puno_sombra",
+      "cuchillada","cortefuria","golpe_cuerpo","gigaimpacto"
+    ],
+    "Toxtricity": [
+      "rayo","trueno","puno_trueno","voltio_cruel","electrotela","onda_voltio","chispazo","carga_parabolica",
+      "puya_nociva","bomba_lodo","onda_toxica","lanzamugre","carga_toxica","acido","colmillo_veneno",
+      "puno_fuego",
+      "alarido","golpe_bajo",
+      "demolicion",
+      "rapidez","golpe_cuerpo","hiperrayo","gigaimpacto"
+    ],
+    "Aggron": [
+      "cabeza_de_hierro","puno_meteoro","cola_ferrea","cuerpo_pesado","foco_resplandor","garra_metal","giro_bola",
+      "roca_afilada","avalancha","tumba_rocas","lanzarrocas","testarazo","antiaereo",
+      "terremoto","excavar","fuerza_equina","terratemblor",
+      "acua_cola",
+      "puno_fuego","puno_trueno","puno_hielo",
+      "demolicion",
+      "golpe_cuerpo","doble_filo","cuchillada","gigaimpacto"
+    ]
+  }
+}
