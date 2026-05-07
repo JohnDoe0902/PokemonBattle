@@ -352,23 +352,6 @@ Tres convenciones que vale la pena conocer:
 
 ---
 
-## Próximos pasos
-
-Para la entrega final (Semana 7):
-
-- **Nivel 3** — heurística avanzada compuesta:
-  `H = w₁·H1 + w₂·H_vivos + w₃·H_velocidad + w₄·H_tipos + w₅·H_estado`,
-  todas las componentes normalizadas en `[-1, 1]`.
-- **MinimaxAgent** con poda α-β y profundidad configurable, reutilizando
-  `BattleState.clone()`.
-- **EvolutionaryOptimizer** — algoritmo genético que ajusta
-  `(w₁..w₅)` con fitness = win-rate vs el agente del Nivel 2.
-- Suite de experimentos: comparación entre los 4 agentes, impacto de la
-  profundidad de Minimax, efecto de la GA. Métricas: win rate, duración
-  media de partidas, varianza.
-- Artículo científico (formato del curso).
-
----
 
 ## Créditos
 
@@ -376,6 +359,6 @@ Para la entrega final (Semana 7):
 - **Sprites de Pokémon:** © Nintendo / Game Freak — uso académico no comercial.
 - **Música y cries:** Pokémon Showdown (`play.pokemonshowdown.com/audio/`).
 - **Fondos de combate y video del intro:** ofrecidos por el equipo.
-- **Fórmula de daño:** adaptada del PDF del curso.
+- **Fórmula de daño:** adaptada al curso.
 - **Tabla de efectividad de tipos:** Bulbapedia, Gen 6+.
-- **Fuente:** [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) (OFL).
+

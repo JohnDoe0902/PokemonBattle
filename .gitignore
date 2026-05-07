@@ -1,6 +1,8 @@
 # ─── Claude Code (no versionar el rastro de la sesión) ───────────────────────
 .claude/
 HEURISTICAS.md
+heuristicas2.md
+prompt_presentacion.md
 
 # ─── Python ───────────────────────────────────────────────────────────────────
 __pycache__/
