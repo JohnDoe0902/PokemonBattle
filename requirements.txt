@@ -3,5 +3,5 @@ Pillow>=10.0.0
 numpy>=1.24
 
 # Sólo para correr scripts/extract_intro.py una vez (no requerido en runtime):
-# imageio>=2.30
-# imageio-ffmpeg>=0.4
+imageio>=2.30
+imageio-ffmpeg>=0.4
