@@ -153,6 +153,9 @@ class BattleState:
         attacker = self.active_pokemon(side)
         defender = self.active_pokemon(1 - side)
         move = attacker.moves[move_idx]
+        # Recurso sin PPs (estilo Forcejeo): el ataque procede pero con daño mínimo,
+        # para que quedarse sin PPs no salga gratis.
+        out_of_pp = not attacker.has_pp(move_idx)
         attacker.consume_pp(move_idx)
         events.append(BattleEvent(
             "use_move", f"¡{attacker.name} usó {move.name}!",
@@ -165,15 +168,15 @@ class BattleState:
         if info["missed"]:
             events.append(BattleEvent("missed", f"¡{attacker.name} falló!", {"side": side}))
             return
-        dealt = defender.take_damage(info["damage"])
+        dealt = defender.take_damage(config.MIN_DAMAGE if out_of_pp else info["damage"])
         events.append(BattleEvent(
             "damage",
             f"{defender.name} recibió {dealt} de daño.",
             {"side": 1 - side, "amount": dealt, "hp_now": defender.hp, "hp_max": defender.hp_max},
         ))
-        if info["crit"]:
+        if info["crit"] and not out_of_pp:
             events.append(BattleEvent("crit", "¡Un golpe crítico!", {}))
-        if info["effectiveness"] != 1.0:
+        if info["effectiveness"] != 1.0 and not out_of_pp:
             label = effectiveness_label(info["effectiveness"])
             if label:
                 events.append(BattleEvent("eff", f"¡{label.capitalize()}!", {"mult": info["effectiveness"]}))
@@ -192,12 +195,21 @@ class BattleState:
         return (priority, speed, self.rng.random())
 
     # ─── Snapshot / clonación (para Minimax en niveles 3+) ────────────────────
-    def clone(self) -> "BattleState":
+    #AGREGADO Inicio
+    # `rng` opcional: si la búsqueda del minimax pasa su propio RNG, la clonación
+    # NO consume del RNG de la batalla (self.rng). Esto preserva los "números
+    # aleatorios comunes" (CRN) durante el entrenamiento del GA: la deliberación
+    # del agente deja de perturbar las tiradas reales de la batalla.
+    # Si rng=None se conserva el comportamiento previo (compatibilidad con el
+    # Nivel 2 y con la reproducibilidad del smoke test headless).
+    def clone(self, rng: Optional[random.Random] = None) -> "BattleState":
+        child_rng = rng if rng is not None else random.Random(self.rng.random())
+        #AGREGADO Fin
         new = BattleState(
             [p.clone() for p in self.teams[0]],
             [p.clone() for p in self.teams[1]],
             names=self.names,
-            rng=random.Random(self.rng.random()),
+            rng=child_rng,  #AGREGADO (usa el RNG resuelto arriba, no consume self.rng si se pasó uno)
         )
         new.active = list(self.active)
         new.turn = self.turn

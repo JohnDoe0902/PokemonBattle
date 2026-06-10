@@ -43,13 +43,16 @@ el enunciado y lo que está hecho:
 | Fórmula de daño del PDF | Listo |
 | **Nivel 1 — Aleatorio** | Listo |
 | **Nivel 2 — Heurística básica (HP)** | Listo |
+| **Nivel 3 — Minimax α-β + AG** | Listo | <!--AGREGADO-->
 | Interfaz gráfica | Listo (estilo Pokémon Gen 3) |
 | Resultados preliminares | Smoke test reproducible |
 
-Lo que queda para la **Entrega Final (Semana 7)**: Nivel 3 (heurística
-avanzada), Minimax con poda α-β, optimización con algoritmo genético y
-artículo científico. La estructura del repo ya está preparada para
-añadirlos como módulos nuevos sin reescribir lo existente.
+<!--AGREGADO Inicio-->
+El **Nivel 3** (Minimax con poda α-β + pesos optimizados por algoritmo genético)
+ya está **implementado e integrado** — ver [`agente 3.md`](agente%203.md) para el
+diseño completo y los resultados. Lo único que queda para la **Entrega Final
+(Semana 7)** es el **artículo científico**.
+<!--AGREGADO Fin-->
 
 ---
 
@@ -137,9 +140,10 @@ equipo y vuelves atrás, no se pierde — solo lo invalida si lo editas.
 
 ## Agentes implementados
 
-Los dos agentes del primer entregable comparten una interfaz común
-(`Agent.choose_action`) → para añadir Nivel 3 / Minimax / GA solo se
-crea un archivo nuevo en `src/agents/`.
+Los agentes comparten una interfaz común (`Agent.choose_action`). El **Nivel 3**
+(Minimax + AG) se añadió como archivos nuevos en `src/agents/` sin reescribir lo
+existente. <!--AGREGADO-->
+
 
 ### Nivel 1 — RandomAgent
 
@@ -188,6 +192,36 @@ la fórmula del PDF pero usando el promedio del factor random (~0.925) y
 multiplicando por la accuracy. Así el agente es determinista dado el
 mismo estado — vital para que los experimentos sean reproducibles.
 
+<!--AGREGADO Inicio-->
+### Nivel 3 — MinimaxAgent
+
+Archivo: [`src/agents/minimax_agent.py`](src/agents/minimax_agent.py)
+
+**Política — Minimax con poda α-β:** búsqueda adversarial de varios turnos. Para
+cada decisión clona el estado, simula los turnos con **daño esperado**
+(determinista) y elige la acción que maximiza una evaluación multi-componente
+`H = Σ wᵢ·Cᵢ`. Modela el movimiento simultáneo del juego con un colapso
+secuencial "paranoico" y poda los cambios por matchup (top-K).
+
+**Componentes (C1–C5):** diferencia de HP, diferencia de vivos, ventaja de tipo,
+ventaja de velocidad y presión de KO — cada uno normalizado a [-1, 1].
+
+**Pesos:** optimizados con un **algoritmo genético**
+([`scripts/train_level3.py`](scripts/train_level3.py), paralelizable con
+`--workers`) que juega contra el Nivel 2; se cargan desde
+`data/level3_weights.json`.
+
+**Resultados honestos (vs Nivel 2, 300 partidas):** ~58% de victorias. La
+profundidad se satura en 2 turnos y la **ablación** muestra que solo **HP y
+vivos** aportan (~6% cada uno); tipo/velocidad/KO ≈ 0. El GA confirma esto al
+converger a pesos HP+vivos dominantes. La conclusión —que en este juego la
+búsqueda capta el valor y el ajuste de pesos tiene margen marginal— está
+documentada con detalle en [`agente 3.md`](agente%203.md) §7.
+
+Se entrena con `py scripts/train_level3.py` y se evalúa con
+`py scripts/evaluate.py` (incluye `--sweep`, `--depth-sweep` y `--ablation`).
+<!--AGREGADO Fin-->
+
 ---
 
 ## Modelado del combate
@@ -229,8 +263,8 @@ Stat   = (2 · base_stat) · 50/100 + 5     (Atk, Def, AtkE, DefE, Vel)
    debe enviar reemplazo antes del próximo turno.
 5. El combate termina cuando un equipo no tiene Pokémon vivos.
 
-`BattleState.clone()` ya está implementado → consumible directamente por
-el `MinimaxAgent` que vendrá en la entrega final.
+`BattleState.clone()` lo consume directamente el `MinimaxAgent` del Nivel 3 (ya
+implementado), con un RNG independiente para no perturbar el azar del combate. <!--AGREGADO-->
 
 ---
 
@@ -331,9 +365,9 @@ Tres convenciones que vale la pena conocer:
 
 1. **`core/` es Pygame-agnóstico.** Permite simular miles de partidas en
    modo headless para los experimentos de la entrega final.
-2. **Los agentes son intercambiables.** Para el Nivel 3 / Minimax / GA
-   solo se añaden archivos en `src/agents/` que implementen
-   `Agent.choose_action`.
+2. **Los agentes son intercambiables.** El Nivel 3 (Minimax + AG) se añadió así:
+   archivos nuevos en `src/agents/` que implementan `Agent.choose_action`, sin
+   reescribir lo existente. <!--AGREGADO-->
 3. **Los datos viven en JSON.** Tu compañero puede balancear movs sin
    tocar código.
 

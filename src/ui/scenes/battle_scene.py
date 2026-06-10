@@ -10,7 +10,7 @@ import pygame
 import config
 from src.core import BattleState, Action
 from src.core.pokemon import Pokemon, all_species
-from src.agents import RandomAgent, HeuristicAgent, HumanAgent
+from src.agents import RandomAgent, HeuristicAgent, HumanAgent, MinimaxAgent  #AGREGADO (MinimaxAgent)
 from src.ui import audio
 from src.ui.assets_loader import (
     get_font, load_pokemon_sprites, load_pokemon_icon,
@@ -52,6 +52,10 @@ def _build_team(names, movesets) -> list[Pokemon]:
 
 
 def _agent_for(name: str):
+    #AGREGADO Inicio
+    if name == "Minimax":
+        return MinimaxAgent.from_weights_file()   # carga data/level3_weights.json
+    #AGREGADO Fin
     return RandomAgent() if name == "Random" else HeuristicAgent()
 
 

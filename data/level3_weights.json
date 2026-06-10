@@ -1,0 +1,37 @@
+{
+  "weights": [
+    0.51,
+    0.39,
+    0.09,
+    0.01,
+    0.01
+  ],
+  "components": [
+    "hp",
+    "vivos",
+    "tipo",
+    "velocidad",
+    "ko"
+  ],
+  "meta": {
+    "selection": "GA-convergidos (no el best-de-holdout, para evitar la maldicion del ganador)",
+    "trained_against": "Nivel2-Heuristic",
+    "depth_train": 2,
+    "top_k": 2,
+    "ga_run": {
+      "population": 25,
+      "games_per_eval": 60,
+      "generations": 50,
+      "holdout_games": 200,
+      "master_seed": 42,
+      "workers": "auto"
+    },
+    "validacion_independiente": {
+      "seed": 246810,
+      "games": 300,
+      "winrate_vs_n2": 0.59,
+      "margen_hp": 0.156,
+      "nota": "Estadisticamente empatado (~57-59%) con prior/hp_only/macro; uniforme queda en 54%. El valor de los pesos esta en concentrarse en HP+vivos(+tipo) y poner velocidad/KO~0, que es lo que el GA descubrio."
+    }
+  }
+}

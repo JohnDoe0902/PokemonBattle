@@ -12,50 +12,32 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-import config
-from src.core import BattleState, Action
-from src.core.pokemon import Pokemon, all_species, random_moveset
+from src.core import BattleState
 from src.agents import RandomAgent, HeuristicAgent
-
-
-def make_team(rng: random.Random, size: int) -> list[Pokemon]:
-    species_names = list(all_species().keys())
-    chosen = rng.sample(species_names, size)
-    team = []
-    for nm in chosen:
-        sp = all_species()[nm]
-        ms = random_moveset(sp, rng=rng)
-        team.append(Pokemon.build(sp, ms))
-    return team
+from src.agents.harness import make_team, run_battle
 
 
 def play_once(agent_a, agent_b, size: int, rng: random.Random,
               max_turns: int = 200) -> tuple[int, int]:
     state = BattleState(make_team(rng, size), make_team(rng, size),
                         names=("A", "B"), rng=rng)
-    turns = 0
-    while not state.is_over() and turns < max_turns:
-        # Si alguien tiene pending_switch, toma esa decisión
-        if state.pending_switch[0]:
-            a = agent_a.choose_forced_switch(state, 0)
-            state.force_switch(0, a.switch_to)
-            continue
-        if state.pending_switch[1]:
-            b = agent_b.choose_forced_switch(state, 1)
-            state.force_switch(1, b.switch_to)
-            continue
-        a = agent_a.choose_action(state, 0)
-        b = agent_b.choose_action(state, 1)
-        state.step(a, b)
-        turns += 1
-    winner = state.winner()
+    winner, turns = run_battle(state, agent_a, agent_b, max_turns)
     return (winner if winner is not None else -1, turns)
 
 
 def run() -> None:
     n_games = 50
-    rng = random.Random(42)
-    a, b = RandomAgent(), HeuristicAgent()
+    #AGREGADO Inicio
+    # Sembrar TODOS los RNG (batalla y agentes) desde una semilla maestra para que
+    # el smoke test sea realmente reproducible. Antes los agentes se creaban sin
+    # semilla (RNG por entropía del sistema), así que el resultado variaba en cada
+    # corrida. Cada agente recibe su propio stream, independiente del de la batalla
+    # (no se comparte el objeto rng) — la misma convención que usará el GA.
+    MASTER_SEED = 42
+    rng = random.Random(MASTER_SEED)                    # RNG exclusivo de la batalla
+    a = RandomAgent(random.Random(MASTER_SEED + 1))     # RNG propio del agente A
+    b = HeuristicAgent(random.Random(MASTER_SEED + 2))  # RNG propio del agente B
+    #AGREGADO Fin
     wins = [0, 0, 0]   # [a, b, draw/timeout]
     durations = []
     for _ in range(n_games):

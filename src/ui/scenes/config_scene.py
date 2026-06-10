@@ -26,7 +26,7 @@ class ConfigScene(Scene):
         ("opp_random_team",      "Equipo rival",            ["Elegir manual", "Aleatorio"]),
         ("player_random_moves",  "Tus movimientos",         ["Elegir manual", "Aleatorio"]),
         ("opp_random_moves",     "Movs del rival",          ["Elegir manual", "Aleatorio"]),
-        ("opp_agent",            "Inteligencia del rival",  ["Nivel 1 (Random)", "Nivel 2 (Heurística)"]),
+        ("opp_agent",            "Inteligencia del rival",  ["Nivel 1 (Random)", "Nivel 2 (Heurística)", "Nivel 3 (Minimax)"]),  #AGREGADO (Nivel 3)
     ]
 
     def __init__(self, session: BattleSession | None = None):
@@ -38,7 +38,7 @@ class ConfigScene(Scene):
             1 if self.session.opp_random_team else 0,
             1 if self.session.player_random_moves else 0,
             1 if self.session.opp_random_moves else 0,
-            0 if self.session.opp_agent == "Random" else 1,
+            {"Random": 0, "Heuristic": 1, "Minimax": 2}.get(self.session.opp_agent, 1),  #AGREGADO (mapeo 3 opciones)
         ]
         self.cursor = 0
         self.bg_static = make_battle_background((config.WINDOW_W, config.WINDOW_H))
@@ -90,7 +90,7 @@ class ConfigScene(Scene):
         s.opp_random_team     = (self.values[2] == 1)
         s.player_random_moves = (self.values[3] == 1)
         s.opp_random_moves    = (self.values[4] == 1)
-        s.opp_agent           = "Random" if self.values[5] == 0 else "Heuristic"
+        s.opp_agent           = {0: "Random", 1: "Heuristic", 2: "Minimax"}[self.values[5]]  #AGREGADO (mapeo 3 opciones)
         from .flow import next_after_config
         self.next = next_after_config(s)
         self.done = True

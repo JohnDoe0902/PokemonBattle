@@ -11,7 +11,7 @@ class BattleSession:
     opp_random_team: bool = False
     player_random_moves: bool = False
     opp_random_moves: bool = False
-    opp_agent: str = "Heuristic"       # "Random" | "Heuristic"
+    opp_agent: str = "Heuristic"       # "Random" | "Heuristic" | "Minimax"  #AGREGADO (Nivel 3)
 
     # Resultado del flujo de selección
     player_team: list[str] = field(default_factory=list)         # nombres de especies

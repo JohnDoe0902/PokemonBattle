@@ -24,7 +24,7 @@ from .types import type_effectiveness
 def _is_physical(move: Move) -> bool:
     if move.flags.get("use_def") == "physical":
         # ej: Psicocarga ataca usando la Def física aunque sea Especial
-        return False
+        return True
     return move.category == "physical"
 
 

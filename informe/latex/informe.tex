@@ -1,0 +1,381 @@
+% POKE-FISI — Informe del proyecto (plantilla ACL, versión final en español)
+% Compilar con pdfLaTeX:  pdflatex -> bibtex -> pdflatex -> pdflatex
+% Si babel-spanish diera problemas de compilación, comenta la línea de \usepackage{babel}.
+\documentclass[11pt]{article}
+
+\usepackage{acl}            % versión final (sin la opción [review])
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage[spanish,es-tabla]{babel}   % tipografía y "Tabla" (no "Cuadro")
+
+\setlength\titlebox{6.5cm}   % más espacio para el título largo + 3 autores
+
+\title{Agentes de Inteligencia Artificial para Combate Pokémon por Turnos: de Heurísticas a Minimax con Pesos Optimizados por Algoritmos Genéticos}
+
+% TODO: reemplazar "Segundo/Tercer/Cuarto Autor" y sus correos por los reales.
+% Misma institución para los cuatro: nombres en fila, afiliación compartida y
+% los correos en dos filas (cuerpo pequeño) para que no se desborden.
+\author{
+  \textbf{Omar Cavero} \quad \textbf{Segundo Autor} \quad
+  \textbf{Tercer Autor} \quad \textbf{Cuarto Autor} \\
+  Universidad Nacional Mayor de San Marcos \\
+  Facultad de Ingeniería de Sistemas e Informática \\[2pt]
+  {\small
+  \texttt{omar.cavero@unmsm.edu.pe} \quad
+  \texttt{segundo.autor@unmsm.edu.pe} \\
+  \texttt{tercer.autor@unmsm.edu.pe} \quad
+  \texttt{cuarto.autor@unmsm.edu.pe}}
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Presentamos POKE-FISI, un simulador de combate Pokémon por turnos diseñado para
+estudiar agentes de inteligencia artificial de complejidad creciente. Sobre un
+motor de combate determinista en lo estructural y estocástico en el daño,
+implementamos tres niveles de agente: (1) un agente aleatorio de referencia,
+(2) una heurística voraz de un turno basada en la diferencia de puntos de vida, y
+(3) un agente Minimax con poda $\alpha$-$\beta$ cuya función de evaluación combina
+linealmente cinco componentes, con pesos optimizados mediante un algoritmo
+genético. Tratamos la naturaleza simultánea del juego con un colapso secuencial
+``paranoico'' y empleamos números aleatorios comunes para comparaciones de baja
+varianza y reproducibles. Nuestros experimentos muestran que el agente Minimax
+supera al voraz, pero que el valor proviene casi en su totalidad de la
+\emph{búsqueda} (que se satura a profundidad dos) y no del ajuste de pesos: tanto
+la convergencia del algoritmo genético como un análisis de ablación coinciden en
+que solo dos componentes (puntos de vida y número de unidades vivas) aportan
+señal, mientras que ventaja de tipo, velocidad y presión de derribo son
+marginales frente a un rival voraz. Reportamos este resultado negativo de forma
+honesta y discutimos sus causas.
+\end{abstract}
+
+\section{Introducción}
+
+Los juegos por turnos de información (casi) perfecta son un banco de pruebas
+clásico para la búsqueda adversarial y la optimización de funciones de
+evaluación \citep{shannon1950,russell2010}. En este trabajo construimos
+POKE-FISI, un simulador de combates tipo Pokémon, y lo usamos para comparar
+agentes de inteligencia artificial de dificultad creciente, desde una línea base
+aleatoria hasta un agente Minimax cuyos pesos se optimizan con un algoritmo
+genético (AG).
+
+El problema tiene características que lo hacen interesante: los equipos y los
+movimientos se asignan aleatoriamente al inicio de cada combate, ambos
+jugadores eligen su acción de forma \emph{simultánea}, y existe la opción de
+cambiar de unidad durante la partida. Esto introduce decisiones estratégicas
+(cuándo atacar y cuándo cambiar) que una heurística miope no captura.
+
+Nuestras contribuciones son:
+\begin{itemize}
+  \item Un motor de combate puro (sin dependencias gráficas) que permite simular
+        miles de partidas de forma reproducible.
+  \item Tres agentes de complejidad creciente bajo una interfaz común,
+        incluyendo un Minimax con poda $\alpha$-$\beta$ que maneja el movimiento
+        simultáneo y los cambios de unidad.
+  \item Una función de evaluación de cinco componentes cuyos pesos se optimizan
+        con un AG, junto con una metodología experimental reproducible basada en
+        números aleatorios comunes.
+  \item Un análisis honesto que, mediante la convergencia del AG y un estudio de
+        ablación, identifica qué componentes realmente importan y muestra que,
+        en este dominio, el ajuste de pesos aporta un margen marginal sobre la
+        búsqueda.
+\end{itemize}
+
+\section{Trabajo relacionado}
+
+La búsqueda adversarial Minimax y la poda $\alpha$-$\beta$ son herramientas
+fundacionales del juego por computadora \citep{shannon1950,knuth1975}, llevadas a
+su máxima expresión en sistemas como Deep Blue \citep{campbell2002}. La calidad de
+un agente Minimax depende en gran medida de su función de evaluación de las hojas,
+cuya construcción manual es laboriosa. Una alternativa es \emph{aprender} los
+pesos de una evaluación lineal mediante computación evolutiva
+\citep{holland1975,goldberg1989,eiben2015}. Nuestro trabajo combina ambas ideas en
+un dominio de movimiento simultáneo y, a diferencia de gran parte de la
+literatura centrada en resultados positivos, documenta con rigor el alcance
+(limitado) de la optimización de pesos frente a un rival débil.
+
+\section{Modelado del combate}
+\label{sec:modelo}
+
+\paragraph{Reglas.} Cada entrenador dispone de un equipo de 3 o 4 unidades, con
+una activa por bando. En cada turno ambos jugadores eligen simultáneamente una
+acción: atacar con uno de sus cuatro movimientos o cambiar la unidad activa. Los
+cambios se resuelven antes que los ataques; entre dos ataques, actúa primero el de
+mayor prioridad y, en empate, el de mayor velocidad. Cuando una unidad llega a
+cero puntos de vida (PV) se debilita y su entrenador debe enviar un reemplazo. El
+combate termina cuando un bando se queda sin unidades.
+
+\paragraph{Fórmula de daño.} El daño base sigue la expresión del curso,
+\begin{equation}
+  \label{eq:dano}
+  D = \left(\frac{A}{D_{\text{op}}}\right)\cdot BP \; - \; V_{\text{op}}\cdot K,
+\end{equation}
+donde $A$ es el ataque (físico o especial) del atacante, $D_{\text{op}}$ la
+defensa correspondiente del oponente, $BP$ la potencia del movimiento,
+$V_{\text{op}}$ la velocidad del oponente y $K{=}0.35$ una constante. Sobre
+$D$ se aplican los bonificadores estándar: bonificación por tipo coincidente
+(STAB, $\times 1.5$), efectividad de tipo $E$ (tabla de 18 tipos, generación 6+),
+golpe crítico ($\times 1.5$ con probabilidad $1/16$), un factor aleatorio
+uniforme en $[0.85, 1.0]$ y una tirada de precisión.
+
+\paragraph{Datos.} El juego incluye 36 unidades con estadísticas reales
+escaladas a nivel 50 y 144 movimientos (18 tipos $\times$ 8) con tipo, categoría,
+potencia, precisión y puntos de poder. Los datos viven en archivos JSON
+editables, de modo que el rebalanceo no requiere tocar código.
+
+\section{Agentes}
+\label{sec:agentes}
+
+Todos los agentes implementan una interfaz común que, dado un estado y un bando,
+devuelve una acción. Esto permite añadir niveles nuevos sin reescribir lo
+existente.
+
+\subsection{Nivel 1: Aleatorio}
+El agente de referencia elige uniformemente entre las acciones legales del turno.
+No distingue entre atacar y cambiar. Sirve de línea base: cualquier agente
+posterior debe superarlo holgadamente.
+
+\subsection{Nivel 2: Heurística voraz}
+El agente de Nivel 2 realiza una búsqueda voraz de un solo turno (\emph{lookahead}
+1-ply). Para cada acción legal simula un turno asumiendo que el rival usa su
+movimiento de mayor daño esperado, y puntúa el estado resultante con la heurística
+\begin{equation}
+  \label{eq:h1}
+  H_1 = \frac{\sum PV_{\text{prop}}}{\sum PV^{\max}_{\text{prop}}}
+      - \frac{\sum PV_{\text{riv}}}{\sum PV^{\max}_{\text{riv}}} \in [-1,1],
+\end{equation}
+es decir, la diferencia normalizada de PV de equipo. Dentro del \emph{lookahead}
+el daño se calcula sin azar (promediando el factor aleatorio y multiplicando por
+la precisión), lo que hace al agente determinista y a los experimentos
+reproducibles.
+
+\subsection{Nivel 3: Minimax con poda $\alpha$-$\beta$}
+\label{sec:n3}
+
+\paragraph{Movimiento simultáneo.} El Minimax clásico supone turnos alternados,
+pero en este juego ambos jugadores deciden a la vez. Adoptamos un \emph{colapso
+secuencial paranoico}: suponemos que elegimos primero y que el rival responde
+óptimamente \emph{viendo} nuestra jugada. Al concederle más información de la que
+posee, obtenemos una estimación pesimista y segura, e integrable directamente con
+poda $\alpha$-$\beta$.
+
+\paragraph{Transición determinista.} La búsqueda no usa el motor estocástico, sino
+una transición propia con \emph{daño esperado}
+\begin{equation}
+  \label{eq:dhat}
+  \hat{D} = D \cdot \text{STAB} \cdot E \cdot \bar{r} \cdot \text{acc},
+\end{equation}
+con $\bar{r}{=}0.925$ (promedio del factor aleatorio), sin golpe crítico y con la
+precisión como multiplicador. Así el árbol es determinista. Un punto clave de
+implementación es que la clonación de estados para la búsqueda emplea un generador
+aleatorio independiente, de modo que la deliberación del agente \emph{no} altera
+el azar real del combate; esto es imprescindible para que los números aleatorios
+comunes (Sección~\ref{sec:metodo}) funcionen durante el entrenamiento.
+
+\paragraph{Función de evaluación.} Las hojas se puntúan con una combinación
+lineal
+\begin{equation}
+  \label{eq:eval}
+  H(s) = \sum_{i=1}^{5} w_i\, C_i(s),
+\end{equation}
+donde cada componente $C_i \in [-1,1]$ es un diferencial ``propio menos rival'':
+(C1) diferencia normalizada de PV; (C2) diferencia normalizada de unidades vivas;
+(C3) ventaja de tipo de la unidad activa, en escala logarítmica simétrica;
+(C4) ventaja de velocidad de la activa; y (C5) presión de derribo (si puedo
+debilitar al rival este turno menos si él puede debilitarme a mí). Los estados
+terminales reciben un valor que domina cualquier valor heurístico, con una
+bonificación por ganar antes.
+
+\paragraph{Búsqueda.} Implementamos Minimax con poda $\alpha$-$\beta$. Para mejorar
+la poda, ordenamos los ataques por daño esperado descendente y limitamos los
+cambios a los $K$ mejores por calidad de emparejamiento (poda dirigida de
+cambios). Los cambios forzados (tras un debilitamiento) se resuelven en solitario,
+replicando la dinámica real del juego.
+
+\paragraph{Optimización de pesos con un AG.} Los pesos $w_i$ se optimizan con un
+algoritmo genético. El genoma es el vector $\mathbf{w}$ restringido al símplex
+($w_i \ge 0$, $\sum_i w_i = 1$), lo que fija la escala y aporta interpretabilidad.
+La aptitud (\emph{fitness}) de un genoma es su tasa de victorias contra el
+Nivel~2, más términos pequeños de margen de PV y rapidez de victoria para densar
+la señal. Usamos selección por torneo con elitismo, cruce BLX-$\alpha$, mutación
+gaussiana con $\sigma$ decreciente y reparación al símplex. La selección final se
+hace sobre un conjunto \emph{held-out} de configuraciones nunca vistas en
+entrenamiento.
+
+\section{Metodología experimental}
+\label{sec:metodo}
+
+Todos los experimentos enfrentan al agente evaluado contra el Nivel~2 sobre
+equipos y movimientos generados aleatoriamente. Para reducir varianza usamos
+\textbf{números aleatorios comunes} (CRN): todas las condiciones (o todos los
+genomas de una generación) juegan exactamente las mismas configuraciones, lo que
+convierte la comparación en pareada. Las configuraciones se re-muestrean entre
+generaciones para evitar sobreajuste, y la siembra de los generadores aleatorios
+no depende del orden de ejecución, de modo que el entrenamiento es reproducible y
+paralelizable sin alterar los resultados. Reportamos tasa de victorias (con su
+error estándar), margen de PV final y duración media en turnos. Salvo indicación,
+los combates son 4 contra 4 y la profundidad de búsqueda es 2.
+
+\section{Resultados}
+\label{sec:resultados}
+
+Como referencia, el Nivel~2 vence al Nivel~1 en torno al 82\% de las partidas,
+confirmando que la heurística voraz mejora claramente sobre el azar.
+
+\paragraph{Efecto de la profundidad.} La Tabla~\ref{tab:depth} muestra que la
+búsqueda aporta valor al pasar de profundidad 1 a 2, pero \emph{se satura}: la
+profundidad 3 no mejora y multiplica el costo. El desajuste entre el modelo
+paranoico (rival óptimo) y el rival real (voraz) ayuda a explicar esta saturación.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{lc}
+    \hline
+    \textbf{Profundidad} & \textbf{Victorias N3} \\
+    \hline
+    1 & 55\% \\
+    2 & 62\% \\
+    3 & 62\% \\
+    \hline
+  \end{tabular}
+  \caption{Barrido de profundidad del Minimax contra el Nivel~2 (100 partidas,
+  CRN, pesos del prior). La profundidad satura en 2.}
+  \label{tab:depth}
+\end{table}
+
+\paragraph{Comparación de pesos.} La Tabla~\ref{tab:pesos} compara distintos
+vectores de pesos sobre un conjunto independiente de 300 partidas. Los pesos
+convergidos del AG obtienen la mejor tasa (59.0\%) y el mejor margen, pero todos
+los vectores ``sensatos'' quedan en $\sim$57--59\%, indistinguibles entre sí
+dentro del error ($\pm 2.9\%$). El único claramente inferior es el uniforme
+(54.0\%), que malgasta peso en componentes poco útiles.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{lcc}
+    \hline
+    \textbf{Pesos} & \textbf{Victorias} & \textbf{Margen PV} \\
+    \hline
+    uniforme                 & 54.0\% & $+0.076$ \\
+    prior (manual)           & 57.3\% & $+0.137$ \\
+    solo PV                  & 57.7\% & $+0.141$ \\
+    macro (PV+vivos)         & 58.7\% & $+0.149$ \\
+    \textbf{AG convergido}   & \textbf{59.0\%} & \textbf{$+0.156$} \\
+    \hline
+  \end{tabular}
+  \caption{Comparación de vectores de pesos contra el Nivel~2
+  (300 partidas, CRN, $\pm 2.9\%$). Diferencias menores a $\sim 6\%$ no son
+  concluyentes.}
+  \label{tab:pesos}
+\end{table}
+
+\paragraph{Convergencia del AG.} Entrenado con 25 individuos, 60 partidas por
+evaluación y 50 generaciones, el AG convirgió de forma estable a pesos dominados
+por PV y unidades vivas ($\approx 90\%$ del peso combinado), llevando velocidad y
+presión de derribo a $\approx 0$.
+
+\paragraph{Ablación.} La Tabla~\ref{tab:ablacion} cuantifica la contribución de
+cada componente anulándolo desde un vector uniforme. Solo PV y unidades vivas
+aportan señal estadísticamente significativa ($\sim 6\%$ cada uno); tipo,
+velocidad y presión de derribo son indistinguibles de cero. Esto coincide
+exactamente con el punto al que convergió el AG.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{lc}
+    \hline
+    \textbf{Componente anulado} & \textbf{Contribución} \\
+    \hline
+    Unidades vivas          & $+6.0\%$ \\
+    Puntos de vida          & $+5.7\%$ \\
+    Ventaja de tipo         & $+1.3\%$ \\
+    Velocidad               & $+0.3\%$ \\
+    Presión de derribo (KO) & $+0.3\%$ \\
+    \hline
+  \end{tabular}
+  \caption{Ablación \emph{leave-one-out} desde pesos uniformes
+  (300 partidas, $\pm 2.9\%$). Solo PV y unidades vivas son significativos.}
+  \label{tab:ablacion}
+\end{table}
+
+\section{Discusión}
+\label{sec:discusion}
+
+Los resultados convergen en una conclusión clara y, en parte, contraintuitiva.
+Primero, \textbf{la búsqueda aporta el grueso del valor}: el Minimax supera al
+voraz, pero la ventaja se agota a profundidad 2. Segundo, \textbf{el ajuste de
+pesos tiene un margen marginal} contra el Nivel~2: todos los vectores razonables
+rinden $\sim$58\%, y el AG no supera a un prior hecho a mano. Tercero, y más
+informativo, \textbf{dos vías independientes} (la convergencia del AG y la
+ablación) coinciden en que solo PV y unidades vivas importan en este dominio.
+
+¿Por qué? El juego es mecánicamente simple, por lo que un agente voraz de un turno
+ya está cerca de lo óptimo en muchas posiciones; el azar de equipos domina
+numerosas partidas con independencia de la habilidad; y el modelo paranoico
+sobreestima a un rival que en realidad juega de forma voraz. En conjunto, el techo
+de victorias contra el Nivel~2 ronda el 58\%.
+
+Un aprendizaje metodológico relevante es la \emph{maldición del ganador}: una
+selección \emph{held-out} con pocas partidas (80) eligió un candidato que parecía
+alcanzar 62.5\%, pero que en un conjunto fresco mayor regresó a $\sim$56\%. Por
+ello, optamos por shippear los pesos \emph{convergidos} del AG (representativos y
+mejor medidos) en lugar del ``mejor de \emph{held-out}''.
+
+El valor real del AG en este proyecto, por tanto, no es batir un win-rate sino
+\emph{descubrir automáticamente} la estructura de la evaluación (qué componentes
+importan), coincidiendo con una ablación manual. Es un resultado negativo, pero
+riguroso y reproducible.
+
+\section{Conclusiones}
+\label{sec:conclusiones}
+
+Presentamos POKE-FISI y una jerarquía de agentes que culmina en un Minimax con
+poda $\alpha$-$\beta$ y pesos optimizados por un AG. El agente supera a la
+heurística voraz, pero mostramos honestamente que, en este dominio y frente a un
+rival voraz, la ganancia procede de la búsqueda (saturada en profundidad 2) y no
+del ajuste fino de pesos, de los cuales solo dos componentes (PV y unidades vivas)
+aportan señal. Como trabajo futuro, evaluar el AG contra un rival más fuerte
+(por ejemplo, en juego propio o contra un Minimax de mayor profundidad) podría dar
+a la optimización de pesos un margen genuino donde demostrar su valor.
+
+\section*{Limitaciones}
+
+El estudio se circunscribe a un motor de combate simplificado: los movimientos de
+estado no tienen efecto, no hay condiciones alteradas, clima ni habilidades, y la
+fórmula de daño es la del curso, no la de la serie. El rival de referencia
+(Nivel~2) es débil, lo que satura la métrica de win-rate y limita el margen
+observable de la optimización de pesos; las conclusiones sobre la (ir)relevancia
+de ciertos componentes son específicas de este rival y podrían cambiar frente a
+oponentes más fuertes. Finalmente, los tamaños muestrales (100--300 partidas)
+implican errores estándar de varios puntos porcentuales, por lo que diferencias
+pequeñas no son concluyentes.
+
+\section*{Agradecimientos}
+
+Agradecemos al curso de Inteligencia Artificial de la Universidad Nacional Mayor
+de San Marcos. Los recursos artísticos y de audio empleados en la interfaz
+provienen de fuentes de uso académico no comercial.
+
+\bibliography{referencias}
+
+\appendix
+
+\section{Detalles de reproducibilidad}
+\label{sec:appendix}
+
+El entrenamiento del AG usa una semilla maestra fija de la que se derivan los
+generadores de la batalla y de cada agente como flujos independientes. Los
+hiperparámetros reportados son: población 25, 60 partidas por evaluación, 50
+generaciones, profundidad de entrenamiento 2, poda de cambios top-2, torneo de
+tamaño 3 con 2 élites, cruce BLX-0.3 y mutación gaussiana con $\sigma_0{=}0.25$ y
+decaimiento 0.8. La evaluación final se realiza a profundidad 2--3 sobre
+conjuntos \emph{held-out}. El entrenamiento es paralelizable a nivel de genoma y
+produce resultados idénticos a la ejecución en serie.
+
+\end{document}
